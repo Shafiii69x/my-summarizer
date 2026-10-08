@@ -45,4 +45,4 @@ if st.button("🚀 Generate Summary", use_container_width=True):
             st.error(f"❌ Error: {e}")
 
 st.markdown("---")
-st.caption("Made with ❤️ | Powered by Gemini 3.8 Flash")
+st.caption("DATA X | Powered by Shafi")
