@@ -1,48 +1,56 @@
 import streamlit as st
 import google.generativeai as genai
 
-st.set_page_config(page_title="AI Text Summarizer", page_icon="✨", layout="centered")
+st.set_page_config(page_title="AI Text Summarizer", page_icon="✨", layout="wide")
 
-st.title("✨ AI Text Summarizer")
-st.markdown("### Smart • Fast • Accurate")
+st.markdown("""
+<style>
+    .main-header {font-size: 2.5rem; color: #1E90FF; text-align: center; margin-bottom: 10px;}
+    .sub-header {font-size: 1.2rem; color: #555; text-align: center;}
+    .stButton>button {background-color: #1E90FF; color: white; border-radius: 10px; padding: 10px 20px;}
+    .stTextArea textarea {border-radius: 10px;}
+</style>
+""", unsafe_allow_html=True)
 
-api_key = st.text_input("🔑 Enter your Gemini API Key", type="password")
+st.markdown('<h1 class="main-header">✨ AI Text Summarizer</h1>', unsafe_allow_html=True)
+st.markdown('<p class="sub-header">Smart • Fast • Beautiful Interface</p>', unsafe_allow_html=True)
+st.markdown("---")
 
-text = st.text_area("📝 Enter text to summarize", height=200)
+col1, col2 = st.columns([2, 1])
 
-summary_style = st.selectbox(
-    "📌 Choose Summary Style",
-    ["Short & Concise", "Bullet Points", "Detailed Explanation"]
-)
+with col1:
+    api_key = st.text_input("🔑 Gemini API Key", type="password", placeholder="Enter your key here")
+    text = st.text_area("📝 Paste your text here", height=280, placeholder="Enter the text you want to summarize...")
+
+with col2:
+    summary_style = st.selectbox("📌 Summary Style", ["Short & Concise", "Bullet Points", "Detailed Explanation"])
 
 if st.button("🚀 Generate Summary", use_container_width=True):
-    if not api_key:
-        st.warning("⚠️ Please enter your Gemini API key.")
-    elif not text.strip():
-        st.warning("⚠️ Please provide some text first.")
+    if not api_key or not text.strip():
+        st.warning("⚠️ Please enter API key and text.")
     else:
         try:
             genai.configure(api_key=api_key)
             model = genai.GenerativeModel("gemini-3.8-flash")
 
             if summary_style == "Short & Concise":
-                prompt = f"Summarize the following text in 2-3 sentences:\n\n{text}"
+                prompt = f"Summarize in 2-3 sentences:\n\n{text}"
             elif summary_style == "Bullet Points":
-                prompt = f"Summarize the following text in bullet points:\n\n{text}"
+                prompt = f"Summarize in bullet points:\n\n{text}"
             else:
-                prompt = f"Provide a detailed summary of the following text:\n\n{text}"
+                prompt = f"Provide a detailed summary:\n\n{text}"
 
             response = model.generate_content(prompt)
 
-            st.success("✅ Summary Generated Successfully!")
-            st.subheader("📄 Summary")
+            st.success("✅ Summary Ready!")
+            st.subheader("📄 Your Summary")
             st.write(response.text)
 
-            if st.button("📋 Copy Summary"):
-                st.toast("Summary copied to clipboard!")
+            if st.button("📋 Copy to Clipboard"):
+                st.toast("Copied successfully!")
 
         except Exception as e:
-            st.error(f"❌ Error: {e}")
+            st.error(f"Error: {e}")
 
 st.markdown("---")
 st.caption("DATA X | Powered by Shafi")
