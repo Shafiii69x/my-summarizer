@@ -78,4 +78,3 @@ if st.button("🚀 Generate Summary", use_container_width=True):
 
 st.markdown("---")
 st.caption("DATA X | Powered by Shafi Alam")
-
